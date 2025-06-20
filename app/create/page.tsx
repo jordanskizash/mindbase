@@ -6,6 +6,9 @@ import { ArrowLeft, Send, MessageSquare, FileText, Plus, Settings2, Paperclip, G
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { AppSidebar } from "@/components/dashboard/app-sidebar"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SessionHeader } from "@/components/session-header"
 import LearningPlanArtifact from "@/components/learning-plan-artifact"
 import { useChatStore } from "@/lib/stores/chat-store"
 import { useLearningPlanStore } from "@/lib/stores/learning-plan-store"
@@ -269,118 +272,122 @@ export default function CreatePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="flex h-screen">
-        {/* Left Side - Chat Interface (40%) */}
-        <div className="w-2/5 border-r border-border flex flex-col">
-          {/* Header */}
-          <div className="p-4 border-b border-border flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.back()}
-              className="h-8 w-8 p-0"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5" />
-              <h1 className="font-semibold">Chat</h1>
-            </div>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 p-4 overflow-y-auto">
-            <div className="space-y-6">
-              {!currentSession?.messages.length ? (
-                <div className="text-center text-muted-foreground py-8">
-                  <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p>Start a conversation to create your learning plan</p>
-                </div>
-              ) : (
-                currentSession.messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex gap-3 ${message.isUser ? 'justify-end' : 'justify-start'}`}
-                  >
-                    {!message.isUser && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Bot className="h-4 w-4 text-primary" />
-                      </div>
-                    )}
-                    <div
-                      className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-                        message.isUser
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted/50 border border-border/50'
-                      }`}
-                    >
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                      <p className="text-xs opacity-60 mt-2">
-                        {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    </div>
-                    {message.isUser && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                        <User className="h-4 w-4 text-primary" />
-                      </div>
-                    )}
-                  </div>
-                ))
-              )}
-              {chatLoading && (
-                <div className="flex gap-3 justify-start">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Bot className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="bg-muted/50 border border-border/50 rounded-2xl px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-                      <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
-
-          {/* Input */}
-          <div className="p-4 border-t border-border">
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-3xl border border-border/30 p-4 shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="flex-1 relative">
-                  <Input
-                    placeholder="Continue the conversation..."
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    disabled={chatLoading}
-                    className="border-0 bg-transparent text-sm placeholder:text-muted-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 px-4 py-3 h-auto"
-                  />
+    <SidebarProvider defaultOpen={false}>
+      <AppSidebar />
+      <div className="flex-1 flex flex-col">
+        <SessionHeader />
+        <div className="flex-1 bg-gray-50 dark:!bg-gray-800 p-4">
+          <div className="flex h-[calc(100vh-8rem)] gap-4">
+            {/* Left Side - Chat Interface */}
+            <div className="w-[400px] bg-white dark:!bg-gray-900 rounded-lg shadow-sm flex flex-col">
+              {/* Header */}
+              <div className="p-4 flex items-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.back()}
+                  className="h-8 w-8 p-0"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
+                  <h1 className="font-semibold">Chat</h1>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mt-3 relative">
-                <div className="flex items-center gap-3">
-                  <div className="relative" ref={dropdownRef}>
+              {/* Messages */}
+              <div className="flex-1 p-4 overflow-y-auto">
+                <div className="space-y-6">
+                  {!currentSession?.messages.length ? (
+                    <div className="text-center text-muted-foreground py-8">
+                      <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p>Start a conversation to create your learning plan</p>
+                    </div>
+                  ) : (
+                    currentSession.messages.map((message) => (
+                      <div
+                        key={message.id}
+                        className={`flex gap-3 ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                      >
+                        {!message.isUser && (
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <Bot className="h-4 w-4 text-primary" />
+                          </div>
+                        )}
+                        <div
+                          className={`max-w-[75%] rounded-2xl px-4 py-3 ${
+                            message.isUser
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-muted/50 border border-border/50'
+                          }`}
+                        >
+                          <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                          <p className="text-xs opacity-60 mt-2">
+                            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
+                        {message.isUser && (
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <User className="h-4 w-4 text-primary" />
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                  {chatLoading && (
+                    <div className="flex gap-3 justify-start">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Bot className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="bg-muted/50 border border-border/50 rounded-2xl px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse"></div>
+                          <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                          <div className="w-2 h-2 bg-primary/60 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+              </div>
+
+              {/* Input */}
+              <div className="p-4 border-t border-border">
+                <div className="bg-gray-100 dark:bg-gray-700 rounded-3xl border border-border/30 p-4 shadow-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1 relative">
+                      <Input
+                        placeholder="Continue the conversation..."
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                        disabled={chatLoading}
+                        className="border-0 bg-transparent text-sm placeholder:text-muted-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0 px-4 py-3 h-auto"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-3 relative">
+                    <div className="flex items-center gap-3">
+                      <div className="relative" ref={dropdownRef}>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => setShowAddOptions(!showAddOptions)}
                       disabled={chatLoading}
-                      className="rounded-full h-8 w-8 p-0 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border-0"
+                      className="rounded-full h-8 w-8 p-0 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors border-0"
                     >
                       <Plus className="h-4 w-4" />
                     </Button>
                     
                     {showAddOptions && (
-                      <div className="absolute top-full left-0 mt-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-2 min-w-[240px] z-10">
+                      <div className="absolute top-full left-0 mt-2 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg p-2 min-w-[240px] z-10">
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 border-0"
+                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-600 border-0"
                           onClick={() => setShowAddOptions(false)}
                         >
                           <Paperclip className="h-4 w-4 mr-3" />
@@ -389,7 +396,7 @@ export default function CreatePage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 border-0"
+                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-600 border-0"
                           onClick={() => setShowAddOptions(false)}
                         >
                           <Grid3X3 className="h-4 w-4 mr-3" />
@@ -405,18 +412,18 @@ export default function CreatePage() {
                       size="sm"
                       onClick={() => setShowToolsOptions(!showToolsOptions)}
                       disabled={chatLoading}
-                      className="rounded-full px-4 h-8 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border-0"
+                      className="rounded-full px-4 h-8 text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors border-0"
                     >
                       <Settings2 className="h-4 w-4 mr-2" />
                       Tools
                     </Button>
                     
                     {showToolsOptions && (
-                      <div className="absolute top-full left-0 mt-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-2 min-w-[240px] z-10">
+                      <div className="absolute top-full left-0 mt-2 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg p-2 min-w-[240px] z-10">
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 border-0"
+                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-600 border-0"
                           onClick={() => setShowToolsOptions(false)}
                         >
                           <Globe className="h-4 w-4 mr-3" />
@@ -425,7 +432,7 @@ export default function CreatePage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 border-0"
+                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-600 border-0"
                           onClick={() => setShowToolsOptions(false)}
                         >
                           <Edit3 className="h-4 w-4 mr-3" />
@@ -434,7 +441,7 @@ export default function CreatePage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 border-0"
+                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-600 border-0"
                           onClick={() => setShowToolsOptions(false)}
                         >
                           <Telescope className="h-4 w-4 mr-3" />
@@ -443,7 +450,7 @@ export default function CreatePage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-700 border-0"
+                          className="w-full justify-start rounded-lg h-12 px-3 hover:bg-gray-200 dark:hover:bg-gray-600 border-0"
                           onClick={() => setShowToolsOptions(false)}
                         >
                           <Lightbulb className="h-4 w-4 mr-3" />
@@ -460,26 +467,29 @@ export default function CreatePage() {
                     disabled={!inputValue.trim() || chatLoading}
                     variant="ghost"
                     size="sm"
-                    className="h-8 w-8 rounded-full p-0 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors border-0"
+                    className="h-8 w-8 rounded-full p-0 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 transition-colors border-0"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+
+          {/* Right Side - Learning Plan Artifact */}
+          <div className="flex-1 bg-white dark:!bg-gray-900 rounded-lg shadow-sm flex flex-col">
+            <LearningPlanArtifact 
+              plan={currentPlan} 
+              isLoading={chatLoading}
+              onPlanUpdate={(updatedPlan) => {
+                // This will be handled by the store automatically
+              }}
+            />
           </div>
         </div>
-
-        {/* Right Side - Learning Plan Artifact (60%) */}
-        <div className="w-3/5 flex flex-col">
-          <LearningPlanArtifact 
-            plan={currentPlan} 
-            onPlanUpdate={(updatedPlan) => {
-              // This will be handled by the store automatically
-            }}
-          />
-        </div>
       </div>
-    </div>
+      </div>
+    </SidebarProvider>
   )
 }

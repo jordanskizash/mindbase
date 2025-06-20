@@ -7,6 +7,9 @@ import { useLearningPlanStore } from "@/lib/stores/learning-plan-store"
 import { useAutoSave } from "@/lib/hooks/use-auto-save"
 import CreatePage from "@/app/create/page"
 import { Loader2 } from "lucide-react"
+import { AppSidebar } from "@/components/dashboard/app-sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { SessionHeader } from "@/components/session-header"
 
 export default function SessionPage() {
   const params = useParams()
@@ -69,46 +72,64 @@ export default function SessionPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="flex items-center gap-3">
-          <Loader2 className="h-6 w-6 animate-spin" />
-          <span className="text-muted-foreground">Loading session...</span>
+      <SidebarProvider defaultOpen={false}>
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <SessionHeader />
+          <div className="flex-1 bg-gray-50 dark:!bg-gray-800 flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span className="text-muted-foreground">Loading session...</span>
+            </div>
+          </div>
         </div>
-      </div>
+      </SidebarProvider>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold text-foreground">Session Error</h1>
-          <p className="text-muted-foreground">{error}</p>
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90"
-          >
-            Back to Dashboard
-          </button>
+      <SidebarProvider defaultOpen={false}>
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <SessionHeader />
+          <div className="flex-1 bg-gray-50 dark:!bg-gray-800 flex items-center justify-center">
+            <div className="text-center space-y-4">
+              <h1 className="text-2xl font-bold text-foreground">Session Error</h1>
+              <p className="text-muted-foreground">{error}</p>
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90"
+              >
+                Back to Dashboard
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      </SidebarProvider>
     )
   }
 
   if (!currentSession || currentSession.id !== sessionId) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold text-foreground">Session Not Found</h1>
-          <p className="text-muted-foreground">The requested session could not be found.</p>
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90"
-          >
-            Back to Dashboard
-          </button>
+      <SidebarProvider defaultOpen={false}>
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <SessionHeader />
+          <div className="flex-1 bg-gray-50 dark:!bg-gray-800 flex items-center justify-center">
+            <div className="text-center space-y-4">
+              <h1 className="text-2xl font-bold text-foreground">Session Not Found</h1>
+              <p className="text-muted-foreground">The requested session could not be found.</p>
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90"
+              >
+                Back to Dashboard
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      </SidebarProvider>
     )
   }
 

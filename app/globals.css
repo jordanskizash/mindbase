@@ -87,43 +87,43 @@
 }
 
 .dark {
-  /* Supabase Dark Theme Colors */
-  --background: 0 0% 7%; /* Very dark background */
-  --foreground: 210 40% 98%; /* Light text (scale-100) */
+  /* Pure neutral grays for dark mode */
+  --background: 220 13% 9%; /* Very dark neutral gray background */
+  --foreground: 0 0% 95%; /* Light neutral text */
   
-  /* Dark cards and surfaces using gray scale */
-  --card: 0 0% 11%; /* Dark gray cards (scale-200) */
-  --card-foreground: 210 40% 98%;
-  --popover: 0 0% 7%;
-  --popover-foreground: 210 40% 98%;
+  /* Dark cards and surfaces using neutral grays */
+  --card: 220 13% 12%; /* Dark neutral gray cards */
+  --card-foreground: 0 0% 95%;
+  --popover: 220 13% 9%;
+  --popover-foreground: 0 0% 95%;
   
   /* Supabase brand green (slightly adjusted for dark mode) */
   --primary: 153 55% 60%; /* Lighter green for dark mode */
   --primary-foreground: 0 0% 7%;
   
-  /* Supabase scale colors (dark mode = gray) */
-  --secondary: 0 0% 15%; /* scale-300 equivalent */
-  --secondary-foreground: 210 40% 98%;
-  --muted: 0 0% 15%;
-  --muted-foreground: 215 25% 55%; /* scale-800 equivalent */
-  --accent: 0 0% 15%;
-  --accent-foreground: 210 40% 98%;
+  /* Neutral gray scale colors */
+  --secondary: 220 13% 16%; /* Neutral gray secondary */
+  --secondary-foreground: 0 0% 95%;
+  --muted: 220 13% 16%;
+  --muted-foreground: 0 0% 65%; /* Medium gray text */
+  --accent: 220 13% 16%;
+  --accent-foreground: 0 0% 95%;
   
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
   
-  --border: 0 0% 20%; /* scale-500 equivalent */
-  --input: 0 0% 20%;
+  --border: 220 13% 20%; /* Neutral gray border */
+  --input: 220 13% 20%;
   --ring: 153 55% 60%;
   
-  /* Dark sidebar colors */
-  --sidebar-background: 0 0% 9%;
-  --sidebar-foreground: 210 40% 98%;
+  /* Dark sidebar colors with neutral grays */
+  --sidebar-background: 220 13% 11%;
+  --sidebar-foreground: 0 0% 95%;
   --sidebar-primary: 153 55% 60%;
-  --sidebar-primary-foreground: 0 0% 9%;
-  --sidebar-accent: 0 0% 15%;
-  --sidebar-accent-foreground: 210 40% 98%;
-  --sidebar-border: 0 0% 20%;
+  --sidebar-primary-foreground: 220 13% 11%;
+  --sidebar-accent: 220 13% 16%;
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-border: 220 13% 20%;
   --sidebar-ring: 153 55% 60%;
 }
 
